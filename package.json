@@ -98,11 +98,13 @@
     "demo": "npm run build && node out/src/cli/index.js test/fixtures/pyright.json --color",
     "docs": "npm run build && node scripts/render-docs.mjs",
     "package": "vsce package --no-dependencies",
-    "vscode:prepublish": "npm run build"
+    "vscode:prepublish": "npm run build",
+    "test:vscode": "npm run build && node out/test/vscode/runTest.js"
   },
   "devDependencies": {
     "@types/node": "^26.6.6",
     "@types/vscode": "^1.85.0",
+    "@vscode/test-electron": "^2.5.2",
     "typescript": "^7.0.2"
   }
 }
