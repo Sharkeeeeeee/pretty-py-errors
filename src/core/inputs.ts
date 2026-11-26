@@ -51,7 +51,9 @@ const PYRIGHT_LINE = /^\s*(.+?):(\d+):(\d+) - (error|warning|information): (.*)$
 export function parsePyrightText(text: string): LocatedDiagnostic[] {
   const result: LocatedDiagnostic[] = [];
   let current: LocatedDiagnostic | undefined;
-  let baseIndent = 0;
+  // Continuation lines are indented by the header's indent plus Pyright's own
+  // two-space nesting, so only the header's indent is removed.
+  let headerIndent = 0;
   for (const line of text.split(/\r?\n/)) {
     const m = line.match(PYRIGHT_LINE);
     if (m) {
@@ -63,10 +65,10 @@ export function parsePyrightText(text: string): LocatedDiagnostic[] {
         severity: normalizeSeverity(m[4]),
         message: m[5],
       };
-      baseIndent = line.length - line.trimStart().length + 2;
+      headerIndent = line.length - line.trimStart().length;
       result.push(current);
-    } else if (current && line.trim() && line.length - line.trimStart().length >= baseIndent) {
-      current.message += "\n" + line.slice(baseIndent);
+    } else if (current && line.trim() && line.length - line.trimStart().length >= headerIndent + 2) {
+      current.message += "\n" + line.slice(headerIndent);
     } else {
       current = undefined;
     }
