@@ -75,7 +75,7 @@ pyright --outputjson examples/demo.py | pretty-py-errors --lang zh-CN
 | 常见错误的修复提示（`None` 检查、invariance、找不到包等） | ✅ | ✅ |
 | 链接到 Pyright / mypy 的规则文档 | ✅ | ✅ |
 | 简体中文、繁體中文、日本語、한국어翻译（70 种信息句式，以及所有规则标题与提示） | ✅ | ✅ |
-| 支持 Pyright JSON、Pyright 文本与 mypy 文本输出 | 不适用 | ✅ |
+| 支持 Pyright JSON／文本，以及 mypy 文本／`--pretty`／JSON 输出 | 不适用 | ✅ |
 | Jupyter Notebook | ✅ | 不适用 |
 
 ## 安装
@@ -119,6 +119,7 @@ npm link
 pyright --outputjson | pretty-py-errors --lang zh-CN
 pyright | pretty-py-errors
 mypy . | pretty-py-errors
+mypy -O json . | pretty-py-errors
 pretty-py-errors report.json
 ```
 
@@ -130,7 +131,7 @@ pretty-py-errors report.json
 | `--width <n>` | 长类型的换行宽度（默认 `60`）。 |
 | `-h, --help` | 显示帮助。 |
 
-只要存在任何错误，CLI 就会以退出码 `1` 结束，可直接用于 CI 和 pre-commit hook。
+存在错误时 CLI 以退出码 `1` 结束，没有问题时以 `0` 结束，可直接用于 CI 和 pre-commit hook。参数错误时以退出码 `2` 结束。
 
 ## 配置
 

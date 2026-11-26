@@ -75,7 +75,7 @@ pyright --outputjson examples/demo.py | pretty-py-errors --lang ja
 | よくあるエラーの修正ヒント（`None` チェック、invariance、パッケージ未検出など） | ✅ | ✅ |
 | Pyright / mypy のルールドキュメントへのリンク | ✅ | ✅ |
 | 日本語・繁體中文・简体中文・한국어への翻訳（70 種類のメッセージと全ルールのタイトル・ヒント） | ✅ | ✅ |
-| Pyright JSON、Pyright テキスト、mypy テキスト出力に対応 | - | ✅ |
+| Pyright の JSON／テキスト、mypy のテキスト／`--pretty`／JSON 出力に対応 | - | ✅ |
 | Jupyter Notebook | ✅ | - |
 
 ## インストール
@@ -119,6 +119,7 @@ Node.js 18 以上が必要です。
 pyright --outputjson | pretty-py-errors --lang ja
 pyright | pretty-py-errors
 mypy . | pretty-py-errors
+mypy -O json . | pretty-py-errors
 pretty-py-errors report.json
 ```
 
@@ -130,7 +131,7 @@ pretty-py-errors report.json
 | `--width <n>` | 長い型を折り返す幅（既定値 `60`）。 |
 | `-h, --help` | ヘルプを表示します。 |
 
-エラーが 1 件以上あると終了コード `1` で終了するため、CI や pre-commit フックでも使えます。
+エラーがあると終了コード `1`、問題がなければ `0` で終了するため、CI や pre-commit フックでも使えます。引数が不正な場合は終了コード `2` で終了します。
 
 ## 設定
 

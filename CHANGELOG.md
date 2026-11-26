@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Invalid `--lang` / `--width` values and unreadable files now fail with a clear message and exit code `2` instead of a stack trace.
 - Colors are only enabled automatically when stdout is a terminal.
 - Added titles and hints for Pyright's `reportPossiblyUnboundVariable` rule name.
+- Plain-text Pyright output lost one level of nesting, so explanation trees were drawn one level too shallow.
+- Long unions were split inside string literals such as `Literal['a | b']`.
 
 ### Security
 

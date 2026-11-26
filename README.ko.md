@@ -75,7 +75,7 @@ pyright --outputjson examples/demo.py | pretty-py-errors --lang ko
 | 자주 발생하는 오류의 수정 힌트(`None` 검사, invariance, 패키지 누락 등) | ✅ | ✅ |
 | Pyright / mypy 규칙 문서 링크 | ✅ | ✅ |
 | 한국어, 繁體中文, 简体中文, 日本語 번역(메시지 70종과 모든 규칙 제목 및 힌트) | ✅ | ✅ |
-| Pyright JSON, Pyright 텍스트, mypy 텍스트 출력 지원 | - | ✅ |
+| Pyright JSON/텍스트, mypy 텍스트/`--pretty`/JSON 출력 지원 | - | ✅ |
 | Jupyter Notebook | ✅ | - |
 
 ## 설치
@@ -119,6 +119,7 @@ Node.js 18 이상이 필요합니다.
 pyright --outputjson | pretty-py-errors --lang ko
 pyright | pretty-py-errors
 mypy . | pretty-py-errors
+mypy -O json . | pretty-py-errors
 pretty-py-errors report.json
 ```
 
@@ -130,7 +131,7 @@ pretty-py-errors report.json
 | `--width <n>` | 긴 형식의 줄바꿈 너비(기본값 `60`). |
 | `-h, --help` | 도움말을 표시합니다. |
 
-오류가 하나라도 있으면 종료 코드 `1`로 끝나므로 CI와 pre-commit 훅에서도 사용할 수 있습니다.
+오류가 있으면 종료 코드 `1`, 문제가 없으면 `0`으로 끝나므로 CI와 pre-commit 훅에서도 사용할 수 있습니다. 인수가 잘못되면 종료 코드 `2`로 끝납니다.
 
 ## 설정
 
