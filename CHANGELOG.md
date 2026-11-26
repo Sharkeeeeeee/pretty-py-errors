@@ -17,6 +17,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - The CLI no longer prints an empty line when a message starts with a long type.
 
+### Security
+
+- Fixed quadratic regular-expression backtracking (ReDoS) when stripping rule codes from messages with long whitespace runs.
+- Deeply nested or very long types are no longer parsed recursively, preventing a stack overflow.
+- Backticks inside types can no longer break out of Markdown code spans or code blocks in the hover.
+- Raw HTML is disabled in hover Markdown.
+- Terminal control characters (ANSI escape sequences) from checker output are stripped before printing.
+- CI runs with read-only `contents` permission and does not persist checkout credentials.
+
 ## [0.1.0] - 2026-11-26
 
 ### Added
