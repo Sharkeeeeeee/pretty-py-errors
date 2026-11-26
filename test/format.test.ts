@@ -138,13 +138,13 @@ test("mypy fixture parses and attaches notes", () => {
 });
 
 test("parseAny detects formats", () => {
-  assert.equal(parseAny(read("pyright.json"))[0].checker, "pyright");
-  assert.equal(parseAny(read("pyright.txt"))[0].checker, "pyright");
-  assert.equal(parseAny(read("mypy.txt"))[0].checker, "mypy");
+  assert.equal(parseAny(read("pyright.json"))![0].checker, "pyright");
+  assert.equal(parseAny(read("pyright.txt"))![0].checker, "pyright");
+  assert.equal(parseAny(read("mypy.txt"))![0].checker, "mypy");
 });
 
 test("every fixture renders without throwing, in both languages", () => {
-  const all = [...parseAny(read("pyright.json")), ...parseAny(read("mypy.txt"))];
+  const all = [...parseAny(read("pyright.json"))!, ...parseAny(read("mypy.txt"))!];
   for (const d of all) {
     for (const locale of LOCALES) {
       assert.ok(toMarkdown(d, { locale }).length > 0);
@@ -155,7 +155,7 @@ test("every fixture renders without throwing, in both languages", () => {
 });
 
 test("every non-English locale translates every fixture line", () => {
-  const all = [...parseAny(read("pyright.json")), ...parseAny(read("demo.json")), ...parseAny(read("mypy.txt"))];
+  const all = [...parseAny(read("pyright.json"))!, ...parseAny(read("demo.json"))!, ...parseAny(read("mypy.txt"))!];
   for (const locale of LOCALES.filter((l) => l !== "en")) {
     for (const d of all) {
       for (const line of splitRule(d.message).message.split("\n")) {
@@ -216,4 +216,22 @@ test("malformed Pyright JSON entries are skipped", () => {
   assert.equal(diags.length, 1);
   assert.equal(diags[0].rule, undefined);
   assert.equal(diags[0].line, undefined);
+});
+
+test("mypy --pretty output is re-joined and matches plain output", () => {
+  const plain = parseMypy(read("mypy.txt"));
+  const pretty = parseMypy(read("mypy-pretty.txt"));
+  assert.equal(pretty.length, plain.length);
+  pretty.forEach((d, i) => {
+    assert.equal(d.rule, plain[i].rule);
+    assert.equal(d.message.split("\n")[0], plain[i].message.split("\n")[0]);
+  });
+});
+
+test("mypy --show-column-numbers --show-error-end keeps the file name", () => {
+  const [d] = parseMypy(read("mypy-columns.txt"));
+  assert.equal(d.file, "examples/sample.py");
+  assert.equal(d.line, 11);
+  assert.equal(d.column, 14);
+  assert.equal(d.rule, "typeddict-item");
 });
