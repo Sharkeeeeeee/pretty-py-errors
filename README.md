@@ -12,7 +12,7 @@ Pyright · Pylance · basedpyright · mypy
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-English · [繁體中文](README.zh-TW.md)
+English · [繁體中文](README.zh-TW.md) · [简体中文](README.zh-CN.md) · [日本語](README.ja.md) · [한국어](README.ko.md)
 
 </div>
 
@@ -42,7 +42,7 @@ Python's type checkers are excellent, but their messages are hard to read. A sin
 - long types are pulled out of the sentence and formatted like code,
 - nested explanations are drawn as a tree,
 - every error gets a short title, a fix hint and a link to the rule's documentation,
-- and everything can be shown in **Traditional Chinese (繁體中文)**.
+- and everything can be shown in **繁體中文, 简体中文, 日本語 or 한국어**.
 
 It ships as a **VS Code extension** (hover) and a **CLI** you can pipe `pyright` or `mypy` output into.
 
@@ -68,13 +68,13 @@ pyright --outputjson examples/demo.py | pretty-py-errors
 
 <sub>The hover image is rendered from the extension's actual Markdown output for the same error.</sub>
 
-### 繁體中文
+### Other languages
 
 ```bash
-pyright --outputjson examples/demo.py | pretty-py-errors --lang zh-TW
+pyright --outputjson examples/demo.py | pretty-py-errors --lang ja
 ```
 
-See the Traditional Chinese output in [README.zh-TW.md](README.zh-TW.md#展示).
+Each localized README shows the output in its language: [繁體中文](README.zh-TW.md) · [简体中文](README.zh-CN.md) · [日本語](README.ja.md) · [한국어](README.ko.md).
 
 All screenshots are generated from real Pyright output in [`test/fixtures`](test/fixtures) by `npm run docs`.
 
@@ -88,7 +88,7 @@ All screenshots are generated from real Pyright output in [`test/fixtures`](test
 | Short title per rule (e.g. *Argument type mismatch*) | ✅ | ✅ |
 | Fix hints for common errors (`None` narrowing, invariance, missing imports, …) | ✅ | ✅ |
 | Link to the Pyright / mypy rule documentation | ✅ | ✅ |
-| Traditional Chinese translation of 70+ message patterns | ✅ | ✅ |
+| Translations into 繁體中文, 简体中文, 日本語 and 한국어 (70 message patterns, all rule titles and hints) | ✅ | ✅ |
 | Works with Pyright JSON, Pyright text and mypy text output | n/a | ✅ |
 | Jupyter notebooks | ✅ | n/a |
 
@@ -139,13 +139,13 @@ pyright | pretty-py-errors
 # mypy
 mypy . | pretty-py-errors
 
-# From a saved report, in Traditional Chinese
-pretty-py-errors report.json --lang zh-TW
+# From a saved report, in Japanese
+pretty-py-errors report.json --lang ja
 ```
 
 | Option | Description |
 | --- | --- |
-| `--lang <en\|zh-TW>` | Output language. Defaults to the `LANG` environment variable. |
+| `--lang <code>` | Output language: `en`, `zh-TW`, `zh-CN`, `ja` or `ko`. Defaults to the `LANG` environment variable. |
 | `--no-color` | Disable colors. `NO_COLOR` is also respected. |
 | `--no-hint` | Hide fix hints. |
 | `--width <n>` | Wrap long types at this width (default `60`). |
@@ -158,7 +158,7 @@ The CLI exits with code `1` when at least one error is found, so it can be used 
 | Setting | Default | Description |
 | --- | --- | --- |
 | `prettyPyErrors.enable` | `true` | Show prettified errors on hover. |
-| `prettyPyErrors.language` | `"auto"` | `auto` (follow the VS Code display language), `en` or `zh-TW`. |
+| `prettyPyErrors.language` | `"auto"` | `auto` (follow the VS Code display language), `en`, `zh-TW`, `zh-CN`, `ja` or `ko`. |
 | `prettyPyErrors.showHints` | `true` | Show a short hint on how to fix common errors. |
 | `prettyPyErrors.inlineTypeLimit` | `40` | Types longer than this are shown as a separate code block. |
 | `prettyPyErrors.typeWidth` | `60` | Wrap long types at this width. |
@@ -200,7 +200,7 @@ The core in [`src/core`](src/core) has no dependency on VS Code and is shared by
 
 - [ ] Publish to the VS Code Marketplace and Open VSX
 - [ ] Publish the CLI to npm
-- [ ] Simplified Chinese, Japanese and Korean translations
+- [x] Traditional Chinese, Simplified Chinese, Japanese and Korean translations
 - [ ] Neovim integration via the shared core
 - [ ] Ruff and Pyrefly diagnostics
 

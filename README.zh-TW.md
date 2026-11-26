@@ -12,7 +12,7 @@ Pyright · Pylance · basedpyright · mypy
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-[English](README.md) · 繁體中文
+[English](README.md) · 繁體中文 · [简体中文](README.zh-CN.md) · [日本語](README.ja.md) · [한국어](README.ko.md)
 
 </div>
 
@@ -40,7 +40,7 @@ Python 的型別檢查器很強大，但錯誤訊息很難讀。一則 Pyright �
 - 把過長的型別從句子中抽出來，用程式碼的格式排版並上色
 - 把巢狀說明畫成樹狀結構
 - 每個錯誤都附上簡短標題、修正提示和規則文件連結
-- 全部可以用**繁體中文**顯示
+- 全部可以用**繁體中文、简体中文、日本語、한국어**顯示
 
 提供 **VS Code 擴充套件**（滑鼠移上去就會顯示）與 **CLI**（把 `pyright` 或 `mypy` 的輸出 pipe 進來即可）。
 
@@ -76,7 +76,7 @@ pyright --outputjson examples/demo.py | pretty-py-errors --lang zh-TW
 | 每條規則的簡短標題（例如「引數型別不符」） | ✅ | ✅ |
 | 常見錯誤的修正提示（`None` 檢查、invariance、找不到套件⋯） | ✅ | ✅ |
 | 連到 Pyright / mypy 的規則文件 | ✅ | ✅ |
-| 70 種以上訊息句型的繁體中文翻譯 | ✅ | ✅ |
+| 繁體中文、简体中文、日本語、한국어翻譯（70 種訊息句型，以及所有規則標題與提示） | ✅ | ✅ |
 | 支援 Pyright JSON、Pyright 文字與 mypy 文字輸出 | 不適用 | ✅ |
 | Jupyter Notebook | ✅ | 不適用 |
 
@@ -126,7 +126,7 @@ pretty-py-errors report.json
 
 | 參數 | 說明 |
 | --- | --- |
-| `--lang <en\|zh-TW>` | 輸出語言，預設依照 `LANG` 環境變數。 |
+| `--lang <code>` | 輸出語言：`en`、`zh-TW`、`zh-CN`、`ja`、`ko`，預設依照 `LANG` 環境變數。 |
 | `--no-color` | 關閉顏色，也支援 `NO_COLOR`。 |
 | `--no-hint` | 不顯示修正提示。 |
 | `--width <n>` | 長型別的換行寬度（預設 `60`）。 |
@@ -139,7 +139,7 @@ pretty-py-errors report.json
 | 設定 | 預設值 | 說明 |
 | --- | --- | --- |
 | `prettyPyErrors.enable` | `true` | 在懸停提示中顯示排版後的錯誤。 |
-| `prettyPyErrors.language` | `"auto"` | `auto`（跟隨 VS Code 介面語言）、`en` 或 `zh-TW`。 |
+| `prettyPyErrors.language` | `"auto"` | `auto`（跟隨 VS Code 介面語言）、`en`、`zh-TW`、`zh-CN`、`ja` 或 `ko`。 |
 | `prettyPyErrors.showHints` | `true` | 顯示常見錯誤的修正提示。 |
 | `prettyPyErrors.inlineTypeLimit` | `40` | 超過這個長度的型別會獨立成程式碼區塊。 |
 | `prettyPyErrors.typeWidth` | `60` | 長型別的換行寬度。 |

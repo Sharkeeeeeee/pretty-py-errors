@@ -20,7 +20,7 @@ This project follows the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.
 ## Ways to Contribute
 
 - Report a message that is formatted badly. Please include the **raw** checker output.
-- Add or improve translations in `src/core/i18n.ts`.
+- Add or improve translations in `src/core/i18n.ts`. Native speakers reviewing the `zh-CN`, `ja` and `ko` wording are especially welcome.
 - Add titles and fix hints for more rules in `src/core/rules.ts`.
 - Add support for another checker or output format in `src/core/inputs.ts`.
 
@@ -55,13 +55,13 @@ examples/      Python files that produce the fixtures
 ## Adding a Translation Pattern
 
 1. Capture the real message from Pyright or mypy and add it to a fixture if it is not covered yet.
-2. Add a `[re("..."), "..."]` entry to the locale table in `src/core/i18n.ts`. Use `QQ` for each quoted part and keep the quotes in the replacement, so the value is still rendered as code.
+2. Add a `[re("..."), { "zh-TW": ..., "zh-CN": ..., ja: ..., ko: ... }]` entry to `PATTERNS` in `src/core/i18n.ts`. Use `QQ` for each quoted part and keep the quotes in every translation, so the value is still rendered as code.
 3. Put more specific patterns before more general ones.
 4. Add a test in `test/format.test.ts`.
 
 ## Adding a Rule Title or Hint
 
-Add an entry to `RULES` in `src/core/rules.ts`, keyed by the Pyright rule name (for example `reportArgumentType`) or the mypy error code (for example `arg-type`). Every entry needs an `en` and a `zh-TW` value.
+Add an entry to `RULES` in `src/core/rules.ts`, keyed by the Pyright rule name (for example `reportArgumentType`) or the mypy error code (for example `arg-type`). Every entry needs a value for each locale: `en`, `zh-TW`, `zh-CN`, `ja` and `ko`. Shared titles and hints live in the `T` and `H` tables.
 
 ## Commit Message Convention
 
