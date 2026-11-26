@@ -4,7 +4,8 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { parseMessage, parseLine } from "../src/core/parse";
 import { prettyType } from "../src/core/prettyType";
-import { translateMessage, resolveLocale } from "../src/core/i18n";
+import { translateMessage, resolveLocale, LOCALES } from "../src/core/i18n";
+import { ruleTitle } from "../src/core/rules";
 import { toMarkdown, toAnsi, splitRule } from "../src/core/format";
 import { parseAny, parseMypy, parsePyrightJson, parsePyrightText } from "../src/core/inputs";
 import { ruleDocsUrl } from "../src/core/rules";
@@ -59,8 +60,31 @@ test("unknown lines are left untouched", () => {
 test("resolveLocale", () => {
   assert.equal(resolveLocale("auto", "zh-tw"), "zh-TW");
   assert.equal(resolveLocale("auto", "zh-Hant-TW"), "zh-TW");
+  assert.equal(resolveLocale("auto", "zh-HK"), "zh-TW");
+  assert.equal(resolveLocale("auto", "zh-cn"), "zh-CN");
+  assert.equal(resolveLocale("auto", "zh_CN"), "zh-CN");
+  assert.equal(resolveLocale("auto", "zh-Hans"), "zh-CN");
+  assert.equal(resolveLocale("auto", "ja"), "ja");
+  assert.equal(resolveLocale("auto", "ja-JP"), "ja");
+  assert.equal(resolveLocale("auto", "ko"), "ko");
+  assert.equal(resolveLocale("auto", "ko_KR"), "ko");
   assert.equal(resolveLocale("auto", "en-US"), "en");
+  assert.equal(resolveLocale("auto", "fr"), "en");
   assert.equal(resolveLocale("zh-TW", "en"), "zh-TW");
+  assert.equal(resolveLocale("ko", "ja"), "ko");
+});
+
+test("zh-CN, ja and ko translations keep quoted code", () => {
+  const msg = '"Literal[2]" is not assignable to "str"';
+  assert.equal(translateMessage(msg, "zh-CN"), '"Literal[2]" 无法赋给 "str"');
+  assert.equal(translateMessage(msg, "ja"), '"Literal[2]" を "str" に割り当てることはできません');
+  assert.equal(translateMessage(msg, "ko"), '"Literal[2]"을(를) "str"에 할당할 수 없습니다');
+});
+
+test("every locale has its own rule titles", () => {
+  const titles = LOCALES.map((l) => ruleTitle("reportArgumentType", l));
+  assert.equal(new Set(titles).size, LOCALES.length);
+  assert.equal(ruleTitle("not-a-rule", "ja"), "型エラー");
 });
 
 test("splitRule handles both checkers", () => {
@@ -122,7 +146,7 @@ test("parseAny detects formats", () => {
 test("every fixture renders without throwing, in both languages", () => {
   const all = [...parseAny(read("pyright.json")), ...parseAny(read("mypy.txt"))];
   for (const d of all) {
-    for (const locale of ["en", "zh-TW"] as const) {
+    for (const locale of LOCALES) {
       assert.ok(toMarkdown(d, { locale }).length > 0);
       const plain = toAnsi(d, { locale, color: false });
       assert.ok(!plain.includes("\u001b["), "no ANSI codes when color is off");
@@ -130,10 +154,15 @@ test("every fixture renders without throwing, in both languages", () => {
   }
 });
 
-test("zh-TW covers every fixture headline", () => {
-  const all = [...parseAny(read("pyright.json")), ...parseAny(read("mypy.txt"))];
-  for (const d of all) {
-    const first = splitRule(d.message).message.split("\n")[0];
-    assert.notEqual(translateMessage(first, "zh-TW"), first, `untranslated: ${first}`);
+test("every non-English locale translates every fixture line", () => {
+  const all = [...parseAny(read("pyright.json")), ...parseAny(read("demo.json")), ...parseAny(read("mypy.txt"))];
+  for (const locale of LOCALES.filter((l) => l !== "en")) {
+    for (const d of all) {
+      for (const line of splitRule(d.message).message.split("\n")) {
+        const text = line.trim();
+        if (!text || text.startsWith("See http") || text.startsWith("def ")) continue;
+        assert.notEqual(translateMessage(text, locale), text, `[${locale}] untranslated: ${text}`);
+      }
+    }
   }
 });
