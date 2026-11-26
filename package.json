@@ -99,7 +99,8 @@
     "docs": "npm run build && node scripts/render-docs.mjs",
     "package": "vsce package --no-dependencies",
     "vscode:prepublish": "npm run build",
-    "test:vscode": "npm run build && node out/test/vscode/runTest.js"
+    "test:vscode": "npm run build && node out/test/vscode/runTest.js",
+    "prepublishOnly": "npm test"
   },
   "devDependencies": {
     "@types/node": "^26.6.6",
