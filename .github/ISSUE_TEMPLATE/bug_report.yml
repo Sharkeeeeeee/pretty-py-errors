@@ -1,0 +1,34 @@
+name: Bug report
+description: A message is formatted incorrectly or the tool fails
+labels: [bug]
+body:
+  - type: textarea
+    id: raw
+    attributes:
+      label: Raw checker output
+      description: Paste the original Pyright / Pylance / mypy message exactly as the checker printed it.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What pretty-py-errors shows
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where
+      options: [VS Code extension, CLI]
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      placeholder: "pretty-py-errors 0.1.0, Pylance 2026.11.1, VS Code 1.106"
