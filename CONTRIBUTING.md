@@ -32,7 +32,8 @@ Requirements: Node.js 18+ and VS Code.
 git clone https://github.com/Sharkeeeeeee/pretty-py-errors.git
 cd pretty-py-errors
 npm install
-npm test          # build and run unit tests
+npm test          # build and run unit and CLI tests
+xvfb-run -a npm run test:vscode   # run the extension in a real VS Code (drop xvfb-run on macOS/Windows)
 npm run demo      # print the CLI output for the sample fixture
 npm run docs      # regenerate the README screenshots
 ```

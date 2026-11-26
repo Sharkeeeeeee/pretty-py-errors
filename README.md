@@ -89,7 +89,7 @@ All screenshots are generated from real Pyright output in [`test/fixtures`](test
 | Fix hints for common errors (`None` narrowing, invariance, missing imports, …) | ✅ | ✅ |
 | Link to the Pyright / mypy rule documentation | ✅ | ✅ |
 | Translations into 繁體中文, 简体中文, 日本語 and 한국어 (70 message patterns, all rule titles and hints) | ✅ | ✅ |
-| Works with Pyright JSON, Pyright text and mypy text output | n/a | ✅ |
+| Works with Pyright JSON/text and mypy text/`--pretty`/JSON output | n/a | ✅ |
 | Jupyter notebooks | ✅ | n/a |
 
 ## Installation
@@ -136,8 +136,9 @@ pyright --outputjson | pretty-py-errors
 # Pyright (plain text output)
 pyright | pretty-py-errors
 
-# mypy
+# mypy (text, --pretty or JSON output)
 mypy . | pretty-py-errors
+mypy -O json . | pretty-py-errors
 
 # From a saved report, in Japanese
 pretty-py-errors report.json --lang ja
@@ -151,7 +152,7 @@ pretty-py-errors report.json --lang ja
 | `--width <n>` | Wrap long types at this width (default `60`). |
 | `-h, --help` | Show help. |
 
-The CLI exits with code `1` when at least one error is found, so it can be used in CI and pre-commit hooks.
+The CLI exits with code `1` when at least one error is found and `0` for a clean report, so it can be used in CI and pre-commit hooks. Invalid arguments exit with code `2`.
 
 ## Configuration
 

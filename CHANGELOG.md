@@ -12,10 +12,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Simplified Chinese (`zh-CN`), Japanese (`ja`) and Korean (`ko`) translations for all message patterns, rule titles and fix hints.
 - Automatic locale detection for `zh-CN`, `ja` and `ko` from the VS Code display language and `$LANG`.
 - Localized READMEs in Simplified Chinese, Japanese and Korean.
+- CLI support for `mypy -O json`, `mypy --pretty` and `--show-error-end` output.
+- The CLI prints `✔ No problems found` for clean Pyright and mypy reports.
+- VS Code integration test that runs the extension in a real VS Code instance in CI.
 
 ### Fixed
 
 - The CLI no longer prints an empty line when a message starts with a long type.
+- The CLI crashed with `EAGAIN` when reading from a pipe such as `pyright | pretty-py-errors`; stdin is now read as a stream.
+- Invalid `--lang` / `--width` values and unreadable files now fail with a clear message and exit code `2` instead of a stack trace.
+- Colors are only enabled automatically when stdout is a terminal.
+- Added titles and hints for Pyright's `reportPossiblyUnboundVariable` rule name.
 
 ### Security
 
