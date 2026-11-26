@@ -17,6 +17,8 @@ mkdirSync("docs", { recursive: true });
 const raw = readFileSync("test/fixtures/demo.txt", "utf8");
 writeFileSync("docs/before.svg", svg("pyright examples/demo.py", raw));
 writeFileSync("docs/after.svg", svg("pyright --outputjson examples/demo.py | pretty-py-errors", cli("test/fixtures/demo.json", "--lang", "en")));
-writeFileSync("docs/after-zh-TW.svg", svg("pyright --outputjson examples/demo.py | pretty-py-errors --lang zh-TW", cli("test/fixtures/demo.json", "--lang", "zh-TW")));
+for (const lang of ["zh-TW", "zh-CN", "ja", "ko"]) {
+  writeFileSync(`docs/after-${lang}.svg`, svg(`pyright --outputjson examples/demo.py | pretty-py-errors --lang ${lang}`, cli("test/fixtures/demo.json", "--lang", lang)));
+}
 console.log("Note: README.md uses PNG copies of before/after (the VS Code Marketplace rejects SVG images); re-export them after regenerating.");
-console.log("wrote docs/before.svg, docs/after.svg, docs/after-zh-TW.svg");
+console.log("wrote docs/before.svg, docs/after.svg and docs/after-<lang>.svg");
