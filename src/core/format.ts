@@ -231,7 +231,7 @@ export function toAnsi(input: DiagnosticInput, options: AnsiOptions = {}): strin
           .split("\n")
           .map((l) => blockIndent + paint(c.gray, "│ ") + highlightType(l, color));
         if (first) {
-          out.push(gutter.trimEnd());
+          if (gutter.trim()) out.push(gutter.trimEnd());
           first = false;
         }
         out.push(...block);
