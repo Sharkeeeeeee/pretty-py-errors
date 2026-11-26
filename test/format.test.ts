@@ -166,3 +166,35 @@ test("every non-English locale translates every fixture line", () => {
     }
   }
 });
+
+// ------------------------------------------------------------------ security
+
+test("splitRule is linear on long whitespace (no ReDoS)", () => {
+  const start = Date.now();
+  splitRule("a" + " ".repeat(200_000) + "x");
+  splitRule(" ".repeat(200_000) + "[x");
+  assert.ok(Date.now() - start < 200, "splitRule took too long");
+});
+
+test("deeply nested types do not overflow the stack", () => {
+  const deep = "list[".repeat(50_000) + "int" + "]".repeat(50_000);
+  assert.equal(prettyType(deep), deep);
+  assert.doesNotThrow(() => toMarkdown({ checker: "pyright", message: `"${deep}" is not defined` }));
+});
+
+test("backticks in types cannot break out of Markdown code", () => {
+  const md = toMarkdown({
+    checker: "pyright",
+    message: 'Type "Literal[\'```\'] | AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" is not assignable to type "a``b"',
+  });
+  assert.match(md, /^````python$/m, "fence must be longer than the backtick run inside");
+  assert.match(md, /```a``b```/, "inline code must use more backticks than it contains");
+});
+
+test("terminal escape sequences are stripped", () => {
+  const out = toAnsi(
+    { checker: "mypy", message: 'Name "\u001b]0;pwned\u0007\u001b[2Jx" is not defined', rule: "name-\u001b[31mdefined" },
+    { color: false },
+  );
+  assert.ok(!/[\u0000-\u0008\u000b-\u001f\u007f-\u009f]/.test(out), JSON.stringify(out));
+});
