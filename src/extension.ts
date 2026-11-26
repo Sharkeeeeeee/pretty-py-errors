@@ -53,7 +53,8 @@ export function activate(context: vscode.ExtensionContext): void {
             },
           ),
         );
-        md.supportHtml = true;
+        // No raw HTML and no command links: diagnostic text comes from the user's code.
+        md.supportHtml = false;
         md.isTrusted = false;
         contents.push(md);
       }

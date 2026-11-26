@@ -31,17 +31,33 @@ export interface FormattedDiagnostic {
 
 /** Strips a trailing mypy `  [code]` or Pyright ` (rule)` that may still be in the text. */
 export function splitRule(message: string): { message: string; rule?: string } {
-  const mypy = message.match(/^([\s\S]*?)\s+\[([a-z][a-z-]*)\]\s*$/);
-  if (mypy) return { message: mypy[1], rule: mypy[2] };
-  const pyright = message.match(/^([\s\S]*?)\s+\((report[A-Za-z]+)\)\s*$/);
-  if (pyright) return { message: pyright[1], rule: pyright[2] };
-  return { message };
+  // Implemented without a backtracking regex over the whole message, which was
+  // quadratic on long runs of whitespace (ReDoS).
+  const text = message.trimEnd();
+  const close = text.at(-1);
+  const open = close === "]" ? "[" : close === ")" ? "(" : undefined;
+  if (!open) return { message };
+  const start = text.lastIndexOf(open);
+  if (start <= 0 || !/\s/.test(text[start - 1])) return { message };
+  const rule = text.slice(start + 1, -1);
+  const valid = open === "[" ? /^[a-z][a-z-]*$/.test(rule) : /^report[A-Za-z]+$/.test(rule);
+  if (!valid) return { message };
+  return { message: text.slice(0, start).trimEnd(), rule };
+}
+
+/**
+ * Removes terminal control characters (ESC, BEL, C1 controls, ...) so that
+ * checker output cannot inject escape sequences into the user's terminal.
+ * Newlines and tabs are kept.
+ */
+export function stripControlChars(text: string): string {
+  return text.replace(/[\u0000-\u0008\u000b-\u001f\u007f-\u009f]/g, "");
 }
 
 export function analyze(input: DiagnosticInput, options: FormatOptions = {}): FormattedDiagnostic {
   const locale = options.locale ?? "en";
-  const split = splitRule(input.message.trimEnd());
-  const rule = input.rule ?? split.rule;
+  const split = splitRule(stripControlChars(input.message).trimEnd());
+  const rule = input.rule !== undefined ? stripControlChars(input.rule) : split.rule;
   const translated = translateMessage(split.message, locale);
   return {
     title: ruleTitle(rule, locale),
@@ -64,10 +80,21 @@ export function blockLimit(line: MessageLine, inlineLimit: number): number {
 
 // ---------------------------------------------------------------- markdown
 
+function longestBacktickRun(text: string): number {
+  return Math.max(0, ...(text.match(/`+/g) ?? []).map((run) => run.length));
+}
+
+/** Wraps text in a code span that its own backticks cannot close. */
 function inlineCode(text: string): string {
-  const ticks = text.includes("`") ? "``" : "`";
+  const ticks = "`".repeat(longestBacktickRun(text) + 1);
   const pad = text.startsWith("`") || text.endsWith("`") ? " " : "";
   return `${ticks}${pad}${text}${pad}${ticks}`;
+}
+
+/** Fenced code block whose fence is longer than any backtick run inside it. */
+function codeBlock(text: string, lang: string): string {
+  const fence = "`".repeat(Math.max(3, longestBacktickRun(text) + 1));
+  return `${fence}${lang}\n${text}\n${fence}`;
 }
 
 function escapeMarkdown(text: string): string {
@@ -84,7 +111,7 @@ function renderSegmentsMarkdown(segments: Segment[], inlineLimit: number, width:
     } else if (seg.text.length > inlineLimit && looksLikeType(seg.text)) {
       if (current.trim()) out.push(current.trim());
       current = "";
-      out.push("```python\n" + prettyType(seg.text, width) + "\n```");
+      out.push(codeBlock(prettyType(seg.text, width), "python"));
     } else {
       current += inlineCode(seg.text);
     }
@@ -114,7 +141,7 @@ export function toMarkdown(input: DiagnosticInput, options: FormatOptions = {}):
   });
 
   if (d.hint) parts.push(`💡 ${d.hint}`);
-  if (options.showOriginal) parts.push("<details><summary>Original message</summary>\n\n```text\n" + d.original + "\n```\n</details>");
+  if (options.showOriginal) parts.push(codeBlock(d.original, "text"));
   return parts.join("\n\n");
 }
 

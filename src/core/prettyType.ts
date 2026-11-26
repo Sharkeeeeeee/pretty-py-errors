@@ -12,11 +12,17 @@ type Node =
 const PAIRS: Record<string, string> = { "[": "]", "(": ")", "{": "}" };
 const CLOSERS = new Set(Object.values(PAIRS));
 
+/** Deeper types are returned unformatted instead of risking a stack overflow. */
+const MAX_DEPTH = 64;
+/** Longer types are returned unformatted to keep hovers fast. */
+const MAX_LENGTH = 20_000;
+
 /** Parses a type string into nested bracket groups. Never throws: unbalanced input stays as text. */
 function parse(src: string): Node[] | undefined {
   let i = 0;
 
-  function parseSeq(close?: string): Node[][] | undefined {
+  function parseSeq(close?: string, depth = 0): Node[][] | undefined {
+    if (depth > MAX_DEPTH) return undefined;
     const items: Node[][] = [[]];
     let buf = "";
     let quote: string | undefined;
@@ -41,7 +47,7 @@ function parse(src: string): Node[] | undefined {
       if (ch in PAIRS) {
         flush();
         i++;
-        const inner = parseSeq(PAIRS[ch]);
+        const inner = parseSeq(PAIRS[ch], depth + 1);
         if (!inner) return undefined;
         items[items.length - 1].push({ kind: "group", open: ch, close: PAIRS[ch], items: inner });
         continue;
@@ -123,7 +129,7 @@ function format(nodes: Node[], indent: string, width: number): string {
 
 export function prettyType(type: string, width = 60): string {
   const trimmed = type.trim();
-  if (trimmed.length <= width) return trimmed;
+  if (trimmed.length <= width || trimmed.length > MAX_LENGTH) return trimmed;
   const nodes = parse(trimmed);
   if (!nodes) return trimmed;
   return format(nodes, "", width);

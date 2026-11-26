@@ -7,7 +7,7 @@
  *   pretty-py-errors report.json
  */
 import { readFileSync } from "node:fs";
-import { toAnsi } from "../core/format";
+import { stripControlChars, toAnsi } from "../core/format";
 import { resolveLocale } from "../core/i18n";
 import { parseAny } from "../core/inputs";
 
@@ -64,7 +64,7 @@ function main(argv: string[]): number {
   const diagnostics = parseAny(text);
 
   if (diagnostics.length === 0) {
-    process.stdout.write(text);
+    process.stdout.write(stripControlChars(text));
     return 0;
   }
 
@@ -74,7 +74,7 @@ function main(argv: string[]): number {
       color,
       width,
       showHint: hint,
-      location: d.file ? `${d.file}${d.line ? ":" + d.line : ""}${d.column ? ":" + d.column : ""}` : undefined,
+      location: d.file ? stripControlChars(`${d.file}${d.line ? ":" + d.line : ""}${d.column ? ":" + d.column : ""}`) : undefined,
     }),
   );
   process.stdout.write(blocks.join("\n\n") + "\n");
