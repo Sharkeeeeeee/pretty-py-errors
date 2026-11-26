@@ -178,6 +178,7 @@ const RULES: Record<string, RuleInfo> = {
   reportMissingTypeStubs: { title: T.missingStubs },
   reportUndefinedVariable: { title: T.undefinedName, hint: H.undefinedName },
   reportPossiblyUnbound: { title: T.unbound, hint: H.unbound },
+  reportPossiblyUnboundVariable: { title: T.unbound, hint: H.unbound },
   reportIncompatibleMethodOverride: { title: T.override, hint: H.override },
   reportIncompatibleVariableOverride: { title: T.override },
   reportAbstractUsage: { title: T.abstract },

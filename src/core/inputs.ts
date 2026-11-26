@@ -1,5 +1,5 @@
 /** Parsers for checker output in the terminal: `pyright --outputjson`, plain pyright, and mypy. */
-import type { DiagnosticInput } from "./format";
+import { splitRule, type DiagnosticInput } from "./format";
 
 export interface LocatedDiagnostic extends DiagnosticInput {
   file?: string;
@@ -74,41 +74,115 @@ export function parsePyrightText(text: string): LocatedDiagnostic[] {
   return result;
 }
 
-const MYPY_LINE = /^(.+?):(\d+):(?:(\d+):)? (error|warning|note): (.*)$/;
+// file:line[:col][:end_line:end_col]: severity: message  (--show-column-numbers / --show-error-end)
+const MYPY_LINE = /^(.+?):(\d+)(?::(\d+))?(?::\d+:\d+)?: (error|warning|note): (.*)$/;
+const MYPY_SUMMARY = /^(Found \d+ errors? in|Success: no issues found)/;
 
-/** mypy prints notes as separate lines; they are attached to the preceding error. */
+/**
+ * Parses mypy's text output. Notes are attached to the preceding error, and
+ * messages wrapped by `--pretty` (unindented continuation lines) are re-joined;
+ * the indented source excerpt and caret lines that `--pretty` adds are skipped.
+ */
 export function parseMypy(text: string): LocatedDiagnostic[] {
   const result: LocatedDiagnostic[] = [];
   let last: LocatedDiagnostic | undefined;
+  let open: { diag: LocatedDiagnostic; note: boolean } | undefined;
+
+  const finish = () => {
+    if (open && !open.note) {
+      const split = splitRule(open.diag.message);
+      open.diag.message = split.message;
+      open.diag.rule = split.rule;
+    }
+    open = undefined;
+  };
+
   for (const line of text.split(/\r?\n/)) {
     const m = line.match(MYPY_LINE);
-    if (!m) continue;
+    if (!m) {
+      const continuation = open && line.trim() && !/^\s/.test(line) && !MYPY_SUMMARY.test(line);
+      if (continuation) {
+        open!.diag.message += " " + line.trim();
+      } else {
+        finish();
+      }
+      continue;
+    }
+    finish();
     const [, file, ln, col, sev, msg] = m;
     if (sev === "note" && last && last.file === file && last.line === Number(ln)) {
       const indent = msg.length - msg.trimStart().length;
       last.message += "\n" + "  ".repeat(1 + Math.floor(indent / 4)) + msg.trim();
+      open = { diag: last, note: true };
       continue;
     }
-    const code = msg.match(/^(.*?)\s+\[([a-z][a-z-]*)\]$/);
     last = {
       checker: "mypy",
       file,
       line: Number(ln),
       column: col ? Number(col) : undefined,
       severity: normalizeSeverity(sev),
-      message: code ? code[1] : msg,
-      rule: code ? code[2] : undefined,
+      message: msg,
     };
+    open = { diag: last, note: false };
+    result.push(last);
+  }
+  finish();
+  return result;
+}
+
+/** `mypy -O json` prints one JSON object per line; notes are attached to the preceding error. */
+export function parseMypyJsonLines(text: string): LocatedDiagnostic[] | undefined {
+  const lines = text.split(/\r?\n/).filter((l) => l.trim());
+  if (lines.length === 0 || !lines.every((l) => l.trimStart().startsWith("{"))) return undefined;
+  const result: LocatedDiagnostic[] = [];
+  let last: LocatedDiagnostic | undefined;
+  for (const line of lines) {
+    let d: Record<string, unknown>;
+    try {
+      d = JSON.parse(line);
+    } catch {
+      return undefined;
+    }
+    if (!d || typeof d !== "object" || typeof d.message !== "string") return undefined;
+    const file = typeof d.file === "string" ? d.file : undefined;
+    const ln = Number.isInteger(d.line) ? (d.line as number) : undefined;
+    if (d.severity === "note" && last && last.file === file && last.line === ln) {
+      for (const note of d.message.split("\n")) {
+        const indent = note.length - note.trimStart().length;
+        last.message += "\n" + "  ".repeat(1 + Math.floor(indent / 4)) + note.trim();
+      }
+      continue;
+    }
+    last = {
+      checker: "mypy",
+      file,
+      line: ln,
+      column: Number.isInteger(d.column) ? (d.column as number) + 1 : undefined,
+      severity: normalizeSeverity(typeof d.severity === "string" ? d.severity : "error"),
+      message: d.message,
+      rule: typeof d.code === "string" ? d.code : undefined,
+    };
+    if (typeof d.hint === "string" && d.hint) last.message += "\n  " + d.hint;
     result.push(last);
   }
   return result;
 }
 
-export function parseAny(text: string): LocatedDiagnostic[] {
+/**
+ * Detects the format and parses it. Returns `undefined` when the input is not
+ * checker output we recognise, and an empty array for a clean report.
+ */
+export function parseAny(text: string): LocatedDiagnostic[] | undefined {
   const json = parsePyrightJson(text);
   if (json) return json;
-  if (PYRIGHT_LINE.test(text.split(/\r?\n/).find((l) => PYRIGHT_LINE.test(l)) ?? "")) {
-    return parsePyrightText(text);
-  }
-  return parseMypy(text);
+  const mypyJson = parseMypyJsonLines(text);
+  if (mypyJson) return mypyJson;
+  const lines = text.split(/\r?\n/);
+  if (lines.some((l) => PYRIGHT_LINE.test(l))) return parsePyrightText(text);
+  if (lines.some((l) => /^\d+ errors?, \d+ warnings?, \d+ informations?\s*$/.test(l.trim()))) return [];
+  const mypy = parseMypy(text);
+  if (mypy.length) return mypy;
+  if (/^Success: no issues found/m.test(text)) return [];
+  return undefined;
 }
