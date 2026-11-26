@@ -25,6 +25,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Raw HTML is disabled in hover Markdown.
 - Terminal control characters (ANSI escape sequences) from checker output are stripped before printing.
 - CI runs with read-only `contents` permission and does not persist checkout credentials.
+- Rule names that exist on `Object.prototype` (for example `[constructor]` in mypy output) no longer crash the formatter.
+- Malformed entries in Pyright JSON reports are skipped instead of crashing the CLI.
+- The VS Code hover skips messages over 20,000 characters and formats at most 10 diagnostics at a time.
+- GitHub Actions are pinned to commit SHAs, `vsce` is pinned to a major version, and Dependabot keeps both up to date.
 
 ## [0.1.0] - 2026-11-26
 
