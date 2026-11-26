@@ -85,12 +85,33 @@ function flat(nodes: Node[]): string {
     .join("");
 }
 
+/** Splits on a separator, ignoring occurrences inside '...' or "..." literals. */
+function splitOutsideQuotes(text: string, sep: string): string[] {
+  const parts: string[] = [];
+  let quote: string | undefined;
+  let last = 0;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (quote) {
+      if (ch === quote) quote = undefined;
+    } else if (ch === "'" || ch === '"') {
+      quote = ch;
+    } else if (text.startsWith(sep, i)) {
+      parts.push(text.slice(last, i));
+      i += sep.length - 1;
+      last = i + 1;
+    }
+  }
+  parts.push(text.slice(last));
+  return parts;
+}
+
 /** Splits a sequence of nodes at top-level ` | ` separators. */
 function splitUnion(nodes: Node[]): Node[][] {
   const parts: Node[][] = [[]];
   for (const n of nodes) {
     if (n.kind === "text" && n.text.includes(" | ")) {
-      const pieces = n.text.split(" | ");
+      const pieces = splitOutsideQuotes(n.text, " | ");
       pieces.forEach((piece, idx) => {
         if (idx > 0) parts.push([]);
         if (piece) parts[parts.length - 1].push({ kind: "text", text: piece });
