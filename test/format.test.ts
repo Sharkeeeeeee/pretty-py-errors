@@ -198,3 +198,22 @@ test("terminal escape sequences are stripped", () => {
   );
   assert.ok(!/[\u0000-\u0008\u000b-\u001f\u007f-\u009f]/.test(out), JSON.stringify(out));
 });
+
+test("rule names that exist on Object.prototype do not crash", () => {
+  for (const rule of ["constructor", "__proto__", "toString", "hasOwnProperty"]) {
+    assert.equal(ruleTitle(rule, "en"), "Type error");
+    assert.doesNotThrow(() => toMarkdown({ checker: "mypy", message: "x", rule }));
+  }
+  const [d] = parseMypy('a.py:1: error: Something  [constructor]');
+  assert.doesNotThrow(() => toAnsi(d));
+});
+
+test("malformed Pyright JSON entries are skipped", () => {
+  const json = JSON.stringify({
+    generalDiagnostics: [null, "str", { message: 5 }, { message: "ok", rule: {}, range: { start: { line: "x" } } }],
+  });
+  const diags = parsePyrightJson(json)!;
+  assert.equal(diags.length, 1);
+  assert.equal(diags[0].rule, undefined);
+  assert.equal(diags[0].line, undefined);
+});
