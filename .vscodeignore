@@ -1,0 +1,15 @@
+.github/**
+.vscode/**
+src/**
+test/**
+scripts/**
+examples/**
+out/test/**
+**/*.map
+**/*.ts
+tsconfig.json
+docs/*.svg
+CONTRIBUTING.md
+CODE_OF_CONDUCT.md
+SECURITY.md
+.npmignore

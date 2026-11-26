@@ -1,0 +1,99 @@
+{
+  "name": "pretty-py-errors",
+  "displayName": "Pretty Python Errors",
+  "description": "Make Pyright / Pylance / mypy type errors pretty and human-readable, in VS Code and in your terminal. 繁體中文支援。",
+  "version": "0.1.0",
+  "publisher": "Sharkeeeeeee",
+  "license": "MIT",
+  "author": "Sharkeeeeeee",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Sharkeeeeeee/pretty-py-errors"
+  },
+  "bugs": "https://github.com/Sharkeeeeeee/pretty-py-errors/issues",
+  "keywords": [
+    "python",
+    "pyright",
+    "pylance",
+    "mypy",
+    "type errors",
+    "errors",
+    "diagnostics",
+    "typing",
+    "繁體中文"
+  ],
+  "categories": [
+    "Programming Languages",
+    "Linters",
+    "Other"
+  ],
+  "icon": "docs/icon.png",
+  "engines": {
+    "vscode": "^1.85.0",
+    "node": ">=18"
+  },
+  "activationEvents": [
+    "onLanguage:python",
+    "onNotebook:jupyter-notebook"
+  ],
+  "main": "./out/src/extension.js",
+  "bin": {
+    "pretty-py-errors": "out/src/cli/index.js"
+  },
+  "contributes": {
+    "configuration": {
+      "title": "Pretty Python Errors",
+      "properties": {
+        "prettyPyErrors.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show prettified Pyright / Pylance / mypy errors on hover."
+        },
+        "prettyPyErrors.language": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "en",
+            "zh-TW"
+          ],
+          "enumDescriptions": [
+            "Follow the VS Code display language",
+            "English",
+            "繁體中文"
+          ],
+          "default": "auto",
+          "description": "Language for titles, hints and translated messages."
+        },
+        "prettyPyErrors.showHints": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show a short hint on how to fix common errors."
+        },
+        "prettyPyErrors.inlineTypeLimit": {
+          "type": "number",
+          "default": 40,
+          "description": "Types longer than this many characters are shown as a separate, formatted code block."
+        },
+        "prettyPyErrors.typeWidth": {
+          "type": "number",
+          "default": 60,
+          "description": "Wrap long types at this width."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsc -p .",
+    "watch": "tsc -w -p .",
+    "test": "npm run build && node --test out/test/*.test.js",
+    "demo": "npm run build && node out/src/cli/index.js test/fixtures/pyright.json --color",
+    "docs": "npm run build && node scripts/render-docs.mjs",
+    "package": "vsce package --no-dependencies",
+    "vscode:prepublish": "npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.6.0"
+  }
+}

@@ -1,0 +1,13 @@
+.github/
+.vscode/
+src/
+test/
+out/test/
+scripts/
+examples/
+docs/
+*.vsix
+*.map
+tsconfig.json
+.vscodeignore
+.editorconfig
