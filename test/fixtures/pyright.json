@@ -1,0 +1,174 @@
+{
+    "version": "1.1.414",
+    "time": "1795661083100",
+    "generalDiagnostics": [
+        {
+            "file": "examples/sample.py",
+            "severity": "error",
+            "message": "Argument of type \"dict[str, str | list[str]]\" cannot be assigned to parameter \"user\" of type \"User\" in function \"greet\"\n  \"Literal['1']\" is not assignable to \"int\"",
+            "range": {
+                "start": {
+                    "line": 10,
+                    "character": 13
+                },
+                "end": {
+                    "line": 10,
+                    "character": 16
+                }
+            },
+            "rule": "reportArgumentType"
+        },
+        {
+            "file": "examples/sample.py",
+            "severity": "error",
+            "message": "Argument of type \"(s: str) -> str\" cannot be assigned to parameter \"formatter\" of type \"(str, int) -> str\" in function \"greet\"\n  Type \"(s: str) -> str\" is not assignable to type \"(str, int) -> str\"\n    Function accepts too few positional parameters; expected 2 but received 1",
+            "range": {
+                "start": {
+                    "line": 10,
+                    "character": 44
+                },
+                "end": {
+                    "line": 10,
+                    "character": 55
+                }
+            },
+            "rule": "reportArgumentType"
+        },
+        {
+            "file": "examples/sample.py",
+            "severity": "error",
+            "message": "Argument of type \"dict[str, list[tuple[Literal[1], Literal[2]]]]\" cannot be assigned to parameter \"x\" of type \"dict[str, list[tuple[int, str]]]\" in function \"f\"\n  \"Literal[2]\" is not assignable to \"str\"",
+            "range": {
+                "start": {
+                    "line": 13,
+                    "character": 13
+                },
+                "end": {
+                    "line": 13,
+                    "character": 14
+                }
+            },
+            "rule": "reportArgumentType"
+        },
+        {
+            "file": "examples/sample.py",
+            "severity": "error",
+            "message": "Argument of type \"Literal['x']\" cannot be assigned to parameter \"m\" of type \"Mode\" in function \"op\"\n  Type \"Literal['x']\" is not assignable to type \"Mode\"\n    \"Literal['x']\" is not assignable to type \"Literal['r']\"\n    \"Literal['x']\" is not assignable to type \"Literal['w']\"\n    \"Literal['x']\" is not assignable to type \"Literal['a']\"",
+            "range": {
+                "start": {
+                    "line": 17,
+                    "character": 3
+                },
+                "end": {
+                    "line": 17,
+                    "character": 6
+                }
+            },
+            "rule": "reportArgumentType"
+        },
+        {
+            "file": "examples/sample.py",
+            "severity": "error",
+            "message": "Type \"Bad\" is not assignable to declared type \"Greeter\"\n  \"Bad\" is incompatible with protocol \"Greeter\"\n    \"greet\" is an incompatible type\n      Type \"(name: int) -> str\" is not assignable to type \"(name: str) -> str\"\n        Parameter 1: type \"str\" is incompatible with type \"int\"\n          \"str\" is not assignable to \"int\"",
+            "range": {
+                "start": {
+                    "line": 23,
+                    "character": 13
+                },
+                "end": {
+                    "line": 23,
+                    "character": 18
+                }
+            },
+            "rule": "reportAssignmentType"
+        },
+        {
+            "file": "examples/sample.py",
+            "severity": "error",
+            "message": "Type \"Literal['hello']\" is not assignable to declared type \"int\"\n  \"Literal['hello']\" is not assignable to \"int\"",
+            "range": {
+                "start": {
+                    "line": 25,
+                    "character": 9
+                },
+                "end": {
+                    "line": 25,
+                    "character": 16
+                }
+            },
+            "rule": "reportAssignmentType"
+        },
+        {
+            "file": "examples/sample.py",
+            "severity": "error",
+            "message": "Import \"nonexistent_mod\" could not be resolved",
+            "range": {
+                "start": {
+                    "line": 26,
+                    "character": 7
+                },
+                "end": {
+                    "line": 26,
+                    "character": 22
+                }
+            },
+            "rule": "reportMissingImports"
+        },
+        {
+            "file": "examples/sample.py",
+            "severity": "error",
+            "message": "\"undefined_name\" is not defined",
+            "range": {
+                "start": {
+                    "line": 27,
+                    "character": 4
+                },
+                "end": {
+                    "line": 27,
+                    "character": 18
+                }
+            },
+            "rule": "reportUndefinedVariable"
+        },
+        {
+            "file": "examples/sample.py",
+            "severity": "error",
+            "message": "Operator \"+\" not supported for \"None\"",
+            "range": {
+                "start": {
+                    "line": 29,
+                    "character": 11
+                },
+                "end": {
+                    "line": 29,
+                    "character": 12
+                }
+            },
+            "rule": "reportOptionalOperand"
+        },
+        {
+            "file": "examples/sample.py",
+            "severity": "error",
+            "message": "Cannot access attribute \"missing\" for class \"A\"\n  Attribute \"missing\" is unknown",
+            "range": {
+                "start": {
+                    "line": 31,
+                    "character": 4
+                },
+                "end": {
+                    "line": 31,
+                    "character": 11
+                }
+            },
+            "rule": "reportAttributeAccessIssue"
+        }
+    ],
+    "summary": {
+        "filesAnalyzed": 1,
+        "errorCount": 10,
+        "warningCount": 0,
+        "informationCount": 0,
+        "timeInSec": 0.273
+    }
+}
+

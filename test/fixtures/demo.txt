@@ -1,0 +1,12 @@
+examples/demo.py
+  examples/demo.py:21:9 - error: Argument of type "dict[str, list[dict[str, Unknown]]]" cannot be assigned to parameter "orders" of type "dict[str, list[Order]]" in function "process"
+    "dict[str, list[dict[str, Unknown]]]" is not assignable to "dict[str, list[Order]]"
+      Type parameter "_VT@dict" is invariant, but "list[dict[str, Unknown]]" is not the same as "list[Order]"
+      Consider switching from "dict" to "Mapping" which is covariant in the value type (reportArgumentType)
+  examples/demo.py:21:14 - error: Argument of type "(order: Order, meta: dict[str, list[str]]) -> bool" cannot be assigned to parameter "on_done" of type "Handler" in function "process"
+    Type "(order: Order, meta: dict[str, list[str]]) -> bool" is not assignable to type "Handler"
+      Parameter 2: type "dict[str, list[int]]" is incompatible with type "dict[str, list[str]]"
+        "dict[str, list[int]]" is not assignable to "dict[str, list[str]]"
+          Type parameter "_VT@dict" is invariant, but "list[int]" is not the same as "list[str]"
+          Consider switching from "dict" to "Mapping" which is covariant in the value type (reportArgumentType)
+2 errors, 0 warnings, 0 informations

@@ -1,0 +1,27 @@
+examples/sample.py
+  examples/sample.py:11:14 - error: Argument of type "dict[str, str | list[str]]" cannot be assigned to parameter "user" of type "User" in function "greet"
+    "Literal['1']" is not assignable to "int" (reportArgumentType)
+  examples/sample.py:11:45 - error: Argument of type "(s: str) -> str" cannot be assigned to parameter "formatter" of type "(str, int) -> str" in function "greet"
+    Type "(s: str) -> str" is not assignable to type "(str, int) -> str"
+      Function accepts too few positional parameters; expected 2 but received 1 (reportArgumentType)
+  examples/sample.py:14:14 - error: Argument of type "dict[str, list[tuple[Literal[1], Literal[2]]]]" cannot be assigned to parameter "x" of type "dict[str, list[tuple[int, str]]]" in function "f"
+    "Literal[2]" is not assignable to "str" (reportArgumentType)
+  examples/sample.py:18:4 - error: Argument of type "Literal['x']" cannot be assigned to parameter "m" of type "Mode" in function "op"
+    Type "Literal['x']" is not assignable to type "Mode"
+      "Literal['x']" is not assignable to type "Literal['r']"
+      "Literal['x']" is not assignable to type "Literal['w']"
+      "Literal['x']" is not assignable to type "Literal['a']" (reportArgumentType)
+  examples/sample.py:24:14 - error: Type "Bad" is not assignable to declared type "Greeter"
+    "Bad" is incompatible with protocol "Greeter"
+      "greet" is an incompatible type
+        Type "(name: int) -> str" is not assignable to type "(name: str) -> str"
+          Parameter 1: type "str" is incompatible with type "int"
+            "str" is not assignable to "int" (reportAssignmentType)
+  examples/sample.py:26:10 - error: Type "Literal['hello']" is not assignable to declared type "int"
+    "Literal['hello']" is not assignable to "int" (reportAssignmentType)
+  examples/sample.py:27:8 - error: Import "nonexistent_mod" could not be resolved (reportMissingImports)
+  examples/sample.py:28:5 - error: "undefined_name" is not defined (reportUndefinedVariable)
+  examples/sample.py:30:12 - error: Operator "+" not supported for "None" (reportOptionalOperand)
+  examples/sample.py:32:5 - error: Cannot access attribute "missing" for class "A"
+    Attribute "missing" is unknown (reportAttributeAccessIssue)
+10 errors, 0 warnings, 0 informations

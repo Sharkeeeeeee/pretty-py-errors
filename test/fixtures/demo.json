@@ -1,0 +1,46 @@
+{
+    "version": "1.1.414",
+    "time": "1795661303147",
+    "generalDiagnostics": [
+        {
+            "file": "examples/demo.py",
+            "severity": "error",
+            "message": "Argument of type \"dict[str, list[dict[str, Unknown]]]\" cannot be assigned to parameter \"orders\" of type \"dict[str, list[Order]]\" in function \"process\"\n  \"dict[str, list[dict[str, Unknown]]]\" is not assignable to \"dict[str, list[Order]]\"\n    Type parameter \"_VT@dict\" is invariant, but \"list[dict[str, Unknown]]\" is not the same as \"list[Order]\"\n    Consider switching from \"dict\" to \"Mapping\" which is covariant in the value type",
+            "range": {
+                "start": {
+                    "line": 20,
+                    "character": 8
+                },
+                "end": {
+                    "line": 20,
+                    "character": 11
+                }
+            },
+            "rule": "reportArgumentType"
+        },
+        {
+            "file": "examples/demo.py",
+            "severity": "error",
+            "message": "Argument of type \"(order: Order, meta: dict[str, list[str]]) -> bool\" cannot be assigned to parameter \"on_done\" of type \"Handler\" in function \"process\"\n  Type \"(order: Order, meta: dict[str, list[str]]) -> bool\" is not assignable to type \"Handler\"\n    Parameter 2: type \"dict[str, list[int]]\" is incompatible with type \"dict[str, list[str]]\"\n      \"dict[str, list[int]]\" is not assignable to \"dict[str, list[str]]\"\n        Type parameter \"_VT@dict\" is invariant, but \"list[int]\" is not the same as \"list[str]\"\n        Consider switching from \"dict\" to \"Mapping\" which is covariant in the value type",
+            "range": {
+                "start": {
+                    "line": 20,
+                    "character": 13
+                },
+                "end": {
+                    "line": 20,
+                    "character": 19
+                }
+            },
+            "rule": "reportArgumentType"
+        }
+    ],
+    "summary": {
+        "filesAnalyzed": 1,
+        "errorCount": 2,
+        "warningCount": 0,
+        "informationCount": 0,
+        "timeInSec": 0.26
+    }
+}
+
