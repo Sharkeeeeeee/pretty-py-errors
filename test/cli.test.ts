@@ -26,7 +26,10 @@ function run(args: string[], input?: string, env: Record<string, string> = {}): 
     child.stdout.on("data", (d) => (stdout += d));
     child.stderr.on("data", (d) => (stderr += d));
     child.on("close", (code) => resolve({ code, stdout, stderr }));
-    if (input === undefined) return child.stdin.end();
+    if (input === undefined) {
+      child.stdin.end();
+      return;
+    }
     const chunks = input.match(/[\s\S]{1,200}/g) ?? [""];
     let i = 0;
     const next = () => {

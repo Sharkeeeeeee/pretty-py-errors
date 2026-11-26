@@ -235,3 +235,15 @@ test("mypy --show-column-numbers --show-error-end keeps the file name", () => {
   assert.equal(d.column, 14);
   assert.equal(d.rule, "typeddict-item");
 });
+
+test("pyright text and JSON produce the same messages", () => {
+  const json = parsePyrightJson(read("pyright.json"))!;
+  const text = parsePyrightText(read("pyright.txt"));
+  assert.equal(text.length, json.length);
+  text.forEach((d, i) => assert.equal(splitRule(d.message).message, json[i]!.message.trimEnd()));
+});
+
+test("prettyType does not split unions inside string literals", () => {
+  const out = prettyType("dict[str, Literal['aaaa | bbbb', 'cccccccccccccccccccc | dddddddddddddddddddd']]", 30);
+  assert.ok(out.includes("'cccccccccccccccccccc | dddddddddddddddddddd'"), out);
+});
