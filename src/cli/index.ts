@@ -3,7 +3,7 @@
  * pretty-py-errors CLI
  *
  *   pyright --outputjson | pretty-py-errors
- *   mypy . | pretty-py-errors --lang zh-TW
+ *   mypy . | pretty-py-errors --lang ja
  *   pretty-py-errors report.json
  */
 import { readFileSync } from "node:fs";
@@ -20,7 +20,7 @@ Usage:
   pretty-py-errors <file> [options]
 
 Options:
-  --lang <en|zh-TW>   Language for titles, hints and messages (default: $LANG)
+  --lang <code>       Language: en, zh-TW, zh-CN, ja, ko (default: from $LANG)
   --no-color          Disable colors (also honours NO_COLOR)
   --no-hint           Hide fix hints
   --width <n>         Wrap long types at this width (default: 60)
