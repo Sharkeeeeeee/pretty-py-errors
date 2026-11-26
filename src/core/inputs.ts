@@ -24,24 +24,26 @@ export function parsePyrightJson(text: string): LocatedDiagnostic[] | undefined 
   }
   const diags = (data as { generalDiagnostics?: unknown[] })?.generalDiagnostics;
   if (!Array.isArray(diags)) return undefined;
-  return diags.map((raw) => {
-    const d = raw as {
-      file?: string;
-      severity?: string;
-      message: string;
-      rule?: string;
-      range?: { start?: { line: number; character: number } };
-    };
-    return {
-      checker: "pyright" as const,
+  // The report may come from anywhere: validate every field instead of trusting its shape.
+  const result: LocatedDiagnostic[] = [];
+  for (const raw of diags) {
+    if (!raw || typeof raw !== "object") continue;
+    const d = raw as Record<string, unknown>;
+    if (typeof d.message !== "string") continue;
+    const start = (d.range as { start?: { line?: unknown; character?: unknown } } | undefined)?.start;
+    const line = Number.isInteger(start?.line) ? (start!.line as number) + 1 : undefined;
+    const column = Number.isInteger(start?.character) ? (start!.character as number) + 1 : undefined;
+    result.push({
+      checker: "pyright",
       message: d.message,
-      rule: d.rule,
-      severity: normalizeSeverity(d.severity ?? "error"),
-      file: d.file,
-      line: d.range?.start ? d.range.start.line + 1 : undefined,
-      column: d.range?.start ? d.range.start.character + 1 : undefined,
-    };
-  });
+      rule: typeof d.rule === "string" ? d.rule : undefined,
+      severity: normalizeSeverity(typeof d.severity === "string" ? d.severity : "error"),
+      file: typeof d.file === "string" ? d.file : undefined,
+      line,
+      column,
+    });
+  }
+  return result;
 }
 
 const PYRIGHT_LINE = /^\s*(.+?):(\d+):(\d+) - (error|warning|information): (.*)$/;

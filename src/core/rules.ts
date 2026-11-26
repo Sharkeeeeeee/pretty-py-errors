@@ -211,8 +211,13 @@ const RULES: Record<string, RuleInfo> = {
 
 const FALLBACK_TITLE: Text = { en: "Type error", "zh-TW": "型別錯誤", "zh-CN": "类型错误", ja: "型エラー", ko: "형식 오류" };
 
+/** Own-property lookup, so names like "constructor" or "__proto__" never hit Object.prototype. */
+function ruleInfo(rule: string | undefined): RuleInfo | undefined {
+  return rule !== undefined && Object.hasOwn(RULES, rule) ? RULES[rule] : undefined;
+}
+
 export function ruleTitle(rule: string | undefined, locale: Locale): string {
-  return (rule && RULES[rule]?.title[locale]) || FALLBACK_TITLE[locale];
+  return ruleInfo(rule)?.title[locale] || FALLBACK_TITLE[locale];
 }
 
 /** Hints triggered by what the message says, which beat the generic per-rule hint. */
@@ -224,7 +229,7 @@ const MESSAGE_HINTS: Array<[RegExp, Text]> = [
 
 export function ruleHint(rule: string | undefined, locale: Locale, message = ""): string | undefined {
   for (const [pattern, hint] of MESSAGE_HINTS) if (pattern.test(message)) return hint[locale];
-  return rule ? RULES[rule]?.hint?.[locale] : undefined;
+  return ruleInfo(rule)?.hint?.[locale];
 }
 
 export function ruleDocsUrl(rule: string | undefined, checker: Checker): string | undefined {

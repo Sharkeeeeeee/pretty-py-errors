@@ -9,6 +9,11 @@ const SELECTOR: vscode.DocumentSelector = [
   { notebookType: "jupyter-notebook", language: "python" },
 ];
 
+/** Longer messages are shown by VS Code as-is; formatting them would only slow the hover down. */
+const MAX_MESSAGE_LENGTH = 20_000;
+/** Upper bound on diagnostics formatted for a single hover. */
+const MAX_DIAGNOSTICS_PER_HOVER = 10;
+
 function severityOf(s: vscode.DiagnosticSeverity): DiagnosticInput["severity"] {
   switch (s) {
     case vscode.DiagnosticSeverity.Warning:
@@ -40,7 +45,8 @@ export function activate(context: vscode.ExtensionContext): void {
       for (const diag of vscode.languages.getDiagnostics(document.uri)) {
         if (!diag.range.contains(position)) continue;
         const checker = checkerFromSource(diag.source);
-        if (!checker) continue;
+        if (!checker || diag.message.length > MAX_MESSAGE_LENGTH) continue;
+        if (contents.length >= MAX_DIAGNOSTICS_PER_HOVER) break;
 
         const md = new vscode.MarkdownString(
           toMarkdown(
