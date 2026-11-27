@@ -9,6 +9,7 @@
 Pyright · Pylance · basedpyright · mypy
 
 [![CI](https://github.com/Sharkeeeeeee/pretty-py-errors/actions/workflows/ci.yml/badge.svg)](https://github.com/Sharkeeeeeee/pretty-py-errors/actions/workflows/ci.yml)
+[![VS Code Marketplace](https://vsmarketplacebadges.dev/version-short/Sharkeeeeeee.pretty-py-errors.svg)](https://marketplace.visualstudio.com/items?itemName=Sharkeeeeeee.pretty-py-errors)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
@@ -96,7 +97,13 @@ All screenshots are generated from real Pyright output in [`test/fixtures`](test
 
 ### VS Code extension
 
-> The Marketplace listing is in preparation. Until then, install from a `.vsix` file.
+Install **Pretty Python Errors** from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=Sharkeeeeeee.pretty-py-errors), or search for `Pretty Python Errors` in the Extensions view (`Ctrl+Shift+X`). You can also install it from the command line:
+
+```bash
+code --install-extension Sharkeeeeeee.pretty-py-errors
+```
+
+To build and install from source instead:
 
 ```bash
 git clone https://github.com/Sharkeeeeeee/pretty-py-errors.git
@@ -199,7 +206,8 @@ The core in [`src/core`](src/core) has no dependency on VS Code and is shared by
 
 ## Roadmap
 
-- [ ] Publish to the VS Code Marketplace and Open VSX
+- [x] Publish to the VS Code Marketplace
+- [ ] Publish to Open VSX
 - [ ] Publish the CLI to npm
 - [x] Traditional Chinese, Simplified Chinese, Japanese and Korean translations
 - [ ] Neovim integration via the shared core

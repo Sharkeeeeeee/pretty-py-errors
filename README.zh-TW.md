@@ -9,6 +9,7 @@
 Pyright · Pylance · basedpyright · mypy
 
 [![CI](https://github.com/Sharkeeeeeee/pretty-py-errors/actions/workflows/ci.yml/badge.svg)](https://github.com/Sharkeeeeeee/pretty-py-errors/actions/workflows/ci.yml)
+[![VS Code Marketplace](https://vsmarketplacebadges.dev/version-short/Sharkeeeeeee.pretty-py-errors.svg)](https://marketplace.visualstudio.com/items?itemName=Sharkeeeeeee.pretty-py-errors)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
@@ -84,7 +85,13 @@ pyright --outputjson examples/demo.py | pretty-py-errors --lang zh-TW
 
 ### VS Code 擴充套件
 
-> Marketplace 上架準備中，目前請用 `.vsix` 安裝。
+從 [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=Sharkeeeeeee.pretty-py-errors) 安裝 **Pretty Python Errors**，或在擴充功能面板（`Ctrl+Shift+X`）搜尋 `Pretty Python Errors`。也可以用指令安裝：
+
+```bash
+code --install-extension Sharkeeeeeee.pretty-py-errors
+```
+
+如果想從原始碼建置安裝：
 
 ```bash
 git clone https://github.com/Sharkeeeeeee/pretty-py-errors.git

@@ -9,6 +9,7 @@
 Pyright · Pylance · basedpyright · mypy
 
 [![CI](https://github.com/Sharkeeeeeee/pretty-py-errors/actions/workflows/ci.yml/badge.svg)](https://github.com/Sharkeeeeeee/pretty-py-errors/actions/workflows/ci.yml)
+[![VS Code Marketplace](https://vsmarketplacebadges.dev/version-short/Sharkeeeeeee.pretty-py-errors.svg)](https://marketplace.visualstudio.com/items?itemName=Sharkeeeeeee.pretty-py-errors)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
@@ -82,7 +83,13 @@ pyright --outputjson examples/demo.py | pretty-py-errors --lang ko
 
 ### VS Code 확장
 
-> Marketplace 게시를 준비 중입니다. 지금은 `.vsix` 파일로 설치하세요.
+[VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=Sharkeeeeeee.pretty-py-errors)에서 **Pretty Python Errors**를 설치하거나, 확장 보기(`Ctrl+Shift+X`)에서 `Pretty Python Errors`를 검색하세요. 명령줄로도 설치할 수 있습니다:
+
+```bash
+code --install-extension Sharkeeeeeee.pretty-py-errors
+```
+
+소스에서 빌드해 설치하려면:
 
 ```bash
 git clone https://github.com/Sharkeeeeeee/pretty-py-errors.git

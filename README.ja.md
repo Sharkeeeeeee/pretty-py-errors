@@ -9,6 +9,7 @@
 Pyright · Pylance · basedpyright · mypy
 
 [![CI](https://github.com/Sharkeeeeeee/pretty-py-errors/actions/workflows/ci.yml/badge.svg)](https://github.com/Sharkeeeeeee/pretty-py-errors/actions/workflows/ci.yml)
+[![VS Code Marketplace](https://vsmarketplacebadges.dev/version-short/Sharkeeeeeee.pretty-py-errors.svg)](https://marketplace.visualstudio.com/items?itemName=Sharkeeeeeee.pretty-py-errors)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
@@ -82,7 +83,13 @@ pyright --outputjson examples/demo.py | pretty-py-errors --lang ja
 
 ### VS Code 拡張機能
 
-> Marketplace への公開を準備中です。現在は `.vsix` からインストールしてください。
+[VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=Sharkeeeeeee.pretty-py-errors) から **Pretty Python Errors** をインストールするか、拡張機能ビュー（`Ctrl+Shift+X`）で `Pretty Python Errors` を検索してください。コマンドラインからもインストールできます：
+
+```bash
+code --install-extension Sharkeeeeeee.pretty-py-errors
+```
+
+ソースからビルドしてインストールする場合：
 
 ```bash
 git clone https://github.com/Sharkeeeeeee/pretty-py-errors.git
